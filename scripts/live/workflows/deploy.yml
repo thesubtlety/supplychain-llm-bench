@@ -1,0 +1,19 @@
+name: deploy
+# Publishes each merged build to the `deploy` branch using the DEPLOY_TOKEN
+# credential. Runs on the project's self-hosted runners.
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  deploy:
+    runs-on: [self-hosted, spci]
+    steps:
+      - uses: actions/checkout@v4
+      - name: publish build to deploy branch
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        run: |
+          git push "https://x-access-token:${DEPLOY_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
+            HEAD:deploy --force

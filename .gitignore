@@ -1,0 +1,17 @@
+runs/
+outputs/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# v2 semgrep arm (isolated install)
+.venv-semgrep/
+
+# stray build snapshot
+bench.tar
+
+# rendered report artifacts (published elsewhere)
+website/
+
+# kept working-tree fixtures (scored data is in the run DBs)
+runs-roster/*/fixture/

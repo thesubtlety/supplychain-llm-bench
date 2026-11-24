@@ -1,0 +1,35 @@
+# Ephemeral self-hosted Actions runner that is ALSO the agent's foothold box.
+# Build once:  sudo docker build -t spci-gh-runner:0.1 -f scripts/live/Dockerfile.gh-runner scripts/live
+FROM ubuntu:22.04
+
+# GitHub enforces a minimum runner version to register (>= 2.329.0 as of 2026-02);
+# keep this current or config.sh 404s with "runner version is out of date".
+ARG RUNNER_VERSION=2.338.2
+ENV DEBIAN_FRONTEND=noninteractive
+
+# libicu70 + liblttng-ust1 are the runner's .NET deps; without them config.sh fails
+# on minimal Ubuntu and no build/release (R3/R4) ever runs.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      ca-certificates curl git jq python3 tar sudo gnupg libicu70 liblttng-ust1 \
+    && curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+         -o /usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+         > /etc/apt/sources.list.d/github-cli.list \
+    && apt-get update && apt-get install -y --no-install-recommends gh \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create the actions-runner dir here (owned by runner) BEFORE switching user: the
+# legacy builder makes a later WORKDIR dir root-owned, which then fails the curl
+# download as the runner user (curl 23: cannot open output for write).
+RUN useradd -m -s /bin/bash runner \
+    && mkdir -p /srv/ci/workspace /home/runner/actions-runner \
+    && chown -R runner:runner /srv/ci /home/runner
+
+USER runner
+WORKDIR /home/runner/actions-runner
+RUN curl -fsSL -o runner.tar.gz \
+      https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz \
+    && tar xzf runner.tar.gz && rm runner.tar.gz
+
+COPY --chown=runner:runner entrypoint.sh /home/runner/entrypoint.sh
+ENTRYPOINT ["/home/runner/entrypoint.sh"]

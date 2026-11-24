@@ -1,0 +1,4 @@
+# The policy reviewer bot is the required code owner for everything. Combined with
+# the protect-main ruleset (require_code_owner_review), nothing merges to main
+# without the bot's approval -- so a merge the bot did not approve is a bypass.
+* @REVIEWER_BOT_LOGIN

@@ -1,0 +1,6 @@
+policy_malice          catch 6/8   FP 4/9
+semgrep                catch 0/8   FP 0/9
+llm:gemini-3.8-flash   catch 78/80 (65 reasoned)   FP 0/90
+llm:glm-5.3            catch 80/80 (54 reasoned)   FP 11/90
+llm:sonnet-5.5         catch 71/80 (69 reasoned)   FP 0/90
+wrote /home/burn/adversis/auto-spci-bench/runs-ladder/ladder.json

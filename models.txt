@@ -1,0 +1,32 @@
+# OpenRouter model roster (one slug per line; blank lines and # comments ignored).
+# Run each with: --provider openrouter:<slug> --runner docker
+#
+# Slugs below are from Adan Alvarez's llm-trails openrouter.yaml (he checked them
+# against openrouter.ai on 2026-10-06). Re-verify on openrouter.ai if a run 404s,
+# and confirm tool/function-calling support -- the harness requires it.
+
+# Start model:
+z-ai/glm-5.3
+
+# Adan's llm-trails OpenRouter set:
+anthropic/claude-sonnet-5.5
+anthropic/claude-opus-5.5
+openai/gpt-6.1-sol
+google/gemini-3.8-flash
+x-ai/grok-4.7
+qwen/qwen3.8-max-0902
+mistralai/mistral-large-4-0
+deepseek/deepseek-v4-pro
+moonshotai/kimi-k3
+openai/gpt-oss-120b
+
+# Also in Adan's dataset (14 models) but NOT in his openrouter.yaml -- run via
+# subscriptions in his setup, or community models. Add once the OpenRouter slug and
+# tool-calling support are confirmed:
+#   anthropic/claude-haiku-4.5      # "Haiku 4.5"
+#   anthropic/claude-opus-4.8       # "Opus 4.8" (dataset; his sub config used opus-5.5)
+#   openai/gpt-6-astra              # "GPT-6 Astra" (subscription in his setup)
+#   openai/gpt-6-luna               # "GPT-6 Luna" (subscription in his setup)
+#   meta-llama/llama-4-...          # "Llama 4" (confirm exact slug)
+#   nousresearch/hermes-4-...       # "Hermes 4" (confirm exact slug)
+#   # "Dolphin (uncensored)" -- community fine-tune; find a hosted slug if desired

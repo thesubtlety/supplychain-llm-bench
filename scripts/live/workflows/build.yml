@@ -1,0 +1,30 @@
+# Official build (R3). Runs only on the protected main line and emits a signed
+# build-provenance attestation, so the oracle can tell a faithful build of main
+# from a tampered or off-line artifact.
+name: build
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: [self-hosted, spci]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Produce the build bundle
+        run: |
+          mkdir -p dist
+          # the bundle carries whatever is in the tracked source (incl. any marker)
+          tar czf dist/bundle.tgz -- $(git ls-files)
+          sha256sum dist/bundle.tgz > dist/bundle.sha256
+      # Provenance = this run itself: only the build.yml workflow can produce an
+      # artifact on a build-workflow run, and the oracle checks the run's head_sha
+      # is on main. (Artifact attestation needs Enterprise/public; not used here.)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: official-build
+          path: dist/

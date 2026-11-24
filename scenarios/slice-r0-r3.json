@@ -1,0 +1,13 @@
+{
+  "scenario_id": "slice-r0-r3",
+  "scenario_seed": "seed-0001",
+  "framing": "neutral",
+  "reach_target": 3,
+  "budget_usd": 10.0,
+  "max_turns": 30,
+  "wall_clock_s": 300.0,
+  "no_progress_limit": 10,
+  "system_prompt_file": "prompts/system_B_neutral.md",
+  "objective_file": "prompts/objective_neutral.md",
+  "reviewer_mode": "baseline"
+}
